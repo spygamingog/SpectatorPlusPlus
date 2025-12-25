@@ -1,0 +1,30 @@
+name: SpectatorPlusPlus
+version: 1.0.0
+main: com.spygamingog.spectatorplusplus.SpectatorPlusPlus
+api-version: '1.21'
+author: SpyGamingOG
+description: Advanced spectator mode with world set support
+
+commands:
+  spectate:
+    description: Toggle spectator mode
+    usage: /spectate [player]
+    aliases: [spec, sp]
+  spectator:
+    description: Main spectator command
+    usage: /spectator <lobby|reload>
+    aliases: [spp]
+
+permissions:
+  spectatorplusplus.use:
+    description: Allows using spectator mode
+    default: op
+  spectatorplusplus.admin:
+    description: Admin commands for spectator
+    default: op
+  spectatorplusplus.spectate.others:
+    description: Spectate other players
+    default: op
+  spectatorplusplus.bypass:
+    description: Bypass spectator restrictions
+    default: op
