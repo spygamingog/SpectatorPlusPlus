@@ -79,20 +79,20 @@
 
 ### 📋 Commands
 
-  Command	    Description	  Permission	  Aliases
-- /spectate	Toggle spectator mode	spectatorplusplus.use	/spec, /sp
-- /spectate <player>	Spectate specific player	spectatorplusplus.spectate.others	
-- /spectator lobby set	Set lobby location	spectatorplusplus.admin	
-- /spectator lobby remove	Remove lobby location	spectatorplusplus.admin	
-- /spectator reload	Reload configuration	spectatorplusplus.admin	
+  Command	                  Description	              Permission	                          Aliases
+- /spectate	                Toggle spectator mode	    spectatorplusplus.use	              /spec, /sp
+- /spectate <player>	      Spectate specific player	spectatorplusplus.spectate.others	
+- /spectator lobby set	    Set lobby location	      spectatorplusplus.admin	
+- /spectator lobby remove  	Remove lobby location    	spectatorplusplus.admin	
+- /spectator reload	        Reload configuration	    spectatorplusplus.admin	
 
 ### 🔐 Permissions
 
-Permission	Description	Default
-- spectatorplusplus.use	Use spectator mode	op
-- spectatorplusplus.admin	Admin commands	op
-- spectatorplusplus.spectate.others	Spectate other players	op
-- spectatorplusplus.bypass	See spectators as non-admin	op
+  Permission	                          Description	                 Default
+- spectatorplusplus.use	                Use spectator mode	            op
+- spectatorplusplus.admin	              Admin commands	                op
+- spectatorplusplus.spectate.others	    Spectate other players      	  op
+- spectatorplusplus.bypass	            See spectators as non-admin  	  op
 
 ### For Server Admins
 ```bash
