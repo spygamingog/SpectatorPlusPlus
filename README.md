@@ -89,10 +89,10 @@
 ### 🔐 Permissions
 
 Permission	Description	Default
-spectatorplusplus.use	Use spectator mode	op
-spectatorplusplus.admin	Admin commands	op
-spectatorplusplus.spectate.others	Spectate other players	op
-spectatorplusplus.bypass	See spectators as non-admin	op
+- spectatorplusplus.use	Use spectator mode	op
+- spectatorplusplus.admin	Admin commands	op
+- spectatorplusplus.spectate.others	Spectate other players	op
+- spectatorplusplus.bypass	See spectators as non-admin	op
 
 ### For Server Admins
 ```bash
