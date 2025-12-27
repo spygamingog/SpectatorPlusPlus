@@ -18,9 +18,7 @@ public class AdvancementListener implements Listener {
     @EventHandler
     public void onPlayerAdvancementDone(PlayerAdvancementDoneEvent event) {
         if (spectatorManager.isSpectator(event.getPlayer())) {
-            // Spectators shouldn't get advancement announcements
-            // The event is already handled by the game, but we can broadcast to empty
-            event.message(null); // Set message to null to prevent broadcast
+            event.message(null);
         }
     }
 }

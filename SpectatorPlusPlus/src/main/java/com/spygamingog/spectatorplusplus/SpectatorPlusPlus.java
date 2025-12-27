@@ -19,47 +19,37 @@ public class SpectatorPlusPlus extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        
-        // Save default config if it doesn't exist
+        printBanner();
         saveDefaultConfig();
-        
-        // Initialize managers in correct order
         configManager = new ConfigManager(this);
-        
-        // Load configuration FIRST
         configManager.loadConfig();
-        
-        // Initialize WorldSetManager AFTER config
         worldSetManager = new WorldSetManager(this);
         worldSetManager.loadWorldSets();
-        
-        // Initialize SpectatorManager AFTER config and world sets
         spectatorManager = new SpectatorManager(this);
-        
-        // Initialize CommandManager
         commandManager = new CommandManager(this);
-        
-        // Register commands
         commandManager.registerCommands();
-        
-        // Register listeners
         registerListeners();
-        
-        // Start inventory sync task (every 2 ticks)
         new SpectatorInventorySync(this).runTaskTimer(this, 0L, 2L);
         
         getLogger().info("Spectator++ v" + getDescription().getVersion() + " has been enabled!");
         getLogger().info("Plugin by " + getDescription().getAuthors().toString());
+        getLogger().info("First-person spectating, GUI selector, and toggle features active!");
+    }
+
+    private void printBanner() {
+        getLogger().info("╔══════════════════════════════════════╗");
+        getLogger().info("║      SpectatorPlusPlus v1.0.1        ║");
+        getLogger().info("║    Advanced Spectator System         ║");
+        getLogger().info("║      by SpyGamingOG                  ║");
+        getLogger().info("╚══════════════════════════════════════╝");
     }
     
-    @Override
+   @Override
     public void onDisable() {
-        // Save any pending data
         if (spectatorManager != null) {
             spectatorManager.disableAllSpectators();
         }
         
-        // Save config
         saveConfig();
         
         getLogger().info("Spectator++ has been disabled!");
@@ -72,9 +62,11 @@ public class SpectatorPlusPlus extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new WorldListener(this), this);
         Bukkit.getPluginManager().registerEvents(new EntityListener(this), this);
         Bukkit.getPluginManager().registerEvents(new AdvancementListener(this), this);
-    
-        // Register the new ItemLockListener
         Bukkit.getPluginManager().registerEvents(new ItemLockListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new FlightListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new SpectatorItemListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new CustomItemListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new BlockPlacePreventionListener(this), this); // NEW
     }
     
     public static SpectatorPlusPlus getInstance() {

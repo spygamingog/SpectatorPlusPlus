@@ -28,12 +28,10 @@ public class ItemLockListener implements Listener {
         if (spectatorManager.isSpectator(player)) {
             ItemStack item = event.getItemDrop().getItemStack();
             
-            // Check if it's a spectator item
             if (isSpectatorItem(item)) {
                 event.setCancelled(true);
                 player.sendMessage(ChatColor.RED + "You cannot drop spectator items!");
                 
-                // Return item to original slot
                 plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                     if (player.isOnline()) {
                         player.getInventory().setItem(0, createCompassItem());
@@ -49,7 +47,6 @@ public class ItemLockListener implements Listener {
         Player player = event.getPlayer();
         
         if (spectatorManager.isSpectator(player)) {
-            // Check if swapping spectator items
             if (isSpectatorItem(event.getMainHandItem()) || isSpectatorItem(event.getOffHandItem())) {
                 event.setCancelled(true);
             }

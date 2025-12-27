@@ -7,8 +7,11 @@
     
     <groupId>com.spygamingog</groupId>
     <artifactId>SpectatorPlusPlus</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
+    
+    <name>SpectatorPlusPlus</name>
+    <description>Advanced spectator mode plugin for Minecraft servers</description>
     
     <properties>
         <java.version>21</java.version>
@@ -34,6 +37,20 @@
     </dependencies>
     
     <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <defaultGoal>clean package</defaultGoal>
+        
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>*.yml</include>
+                    <include>plugin.yml</include>
+                </includes>
+            </resource>
+        </resources>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -47,6 +64,7 @@
                     </compilerArgs>
                 </configuration>
             </plugin>
+            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -63,16 +81,20 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Implementation-Version>${project.version}</Implementation-Version>
+                            <Built-By>SpyGamingOG</Built-By>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>*.yml</include>
-                    <include>plugin.yml</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
 </project>

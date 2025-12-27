@@ -4,7 +4,6 @@ import com.spygamingog.spectatorplusplus.SpectatorPlusPlus;
 import com.spygamingog.spectatorplusplus.utils.SpectatorManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class SpectatorInventorySync extends BukkitRunnable {
@@ -29,28 +28,27 @@ public class SpectatorInventorySync extends BukkitRunnable {
     }
     
     private void syncInventoryView(Player spectator, Player target) {
-        InventoryView targetView = target.getOpenInventory();
-        InventoryView spectatorView = spectator.getOpenInventory();
+        if (spectator.getGameMode() == org.bukkit.GameMode.SPECTATOR) {
+            return;
+        }
         
-        // If target has an inventory open
-        if (targetView != null && !targetView.getType().toString().contains("CRAFTING")) {
-            // If spectator doesn't have same inventory open, open it
+        org.bukkit.inventory.InventoryView targetView = target.getOpenInventory();
+        org.bukkit.inventory.InventoryView spectatorView = spectator.getOpenInventory();
+        
+        if (targetView != null && targetView.getType() != org.bukkit.event.inventory.InventoryType.CRAFTING) {
             if (spectatorView == null || 
                 !spectatorView.getTopInventory().equals(targetView.getTopInventory())) {
                 
-                // Schedule to open on main thread
                 Bukkit.getScheduler().runTask(plugin, () -> {
                     if (spectator.isOnline() && target.isOnline()) {
                         try {
                             spectator.openInventory(target.getInventory());
                         } catch (Exception e) {
-                            // Silently handle - might be inventory already open
                         }
                     }
                 });
             }
-        } else if (spectatorView != null) {
-            // If target closed inventory, close spectator's too
+        } else if (spectatorView != null && spectatorView.getType() != org.bukkit.event.inventory.InventoryType.CRAFTING) {
             Bukkit.getScheduler().runTask(plugin, () -> {
                 if (spectator.isOnline()) {
                     spectator.closeInventory();

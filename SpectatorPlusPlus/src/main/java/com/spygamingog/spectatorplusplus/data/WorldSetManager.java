@@ -9,7 +9,7 @@ import java.util.*;
 public class WorldSetManager {
     private final SpectatorPlusPlus plugin;
     private final ConfigManager configManager;
-    private final Map<String, Set<String>> worldSets; // Base world name -> Set of world names
+    private final Map<String, Set<String>> worldSets;
     
     public WorldSetManager(SpectatorPlusPlus plugin) {
         this.plugin = plugin;
@@ -32,17 +32,18 @@ public class WorldSetManager {
         for (World world : Bukkit.getWorlds()) {
             String worldName = world.getName();
             
-            // Check if this world is already part of a set
+            if (configManager.isSpectatorLobbyWorld(worldName)) {
+                continue;
+            }
+            
             if (isWorldInAnySet(worldName)) {
                 continue;
             }
             
-            // Check if it's a nether or end world
             if (worldName.endsWith(netherSuffix) || worldName.endsWith(endSuffix)) {
                 continue;
             }
             
-            // Try to find nether and end worlds for this base world
             Set<String> set = new HashSet<>();
             set.add(worldName);
             
@@ -67,14 +68,20 @@ public class WorldSetManager {
     }
     
     public Set<String> getWorldSet(String worldName) {
-        // Find which set this world belongs to
+        if (configManager.isSpectatorLobbyWorld(worldName)) {
+            Set<String> allWorlds = new HashSet<>();
+            for (World world : Bukkit.getWorlds()) {
+                allWorlds.add(world.getName());
+            }
+            return allWorlds;
+        }
+        
         for (Set<String> set : worldSets.values()) {
             if (set.contains(worldName)) {
                 return set;
             }
         }
         
-        // If not found, return a set with just this world
         Set<String> singleSet = new HashSet<>();
         singleSet.add(worldName);
         return singleSet;
@@ -94,6 +101,11 @@ public class WorldSetManager {
     }
     
     public boolean areWorldsInSameSet(String world1, String world2) {
+        if (configManager.isSpectatorLobbyWorld(world1) || 
+            configManager.isSpectatorLobbyWorld(world2)) {
+            return true;
+        }
+        
         Set<String> set1 = getWorldSet(world1);
         return set1.contains(world2);
     }

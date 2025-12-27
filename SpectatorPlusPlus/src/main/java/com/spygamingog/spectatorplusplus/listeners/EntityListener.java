@@ -30,7 +30,6 @@ public class EntityListener implements Listener {
             Player player = (Player) event.getTarget();
             
             if (spectatorManager.isSpectator(player)) {
-                // Entities shouldn't target spectators
                 event.setCancelled(true);
             }
         }

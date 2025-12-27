@@ -38,9 +38,11 @@ public class ConfigManager {
                 );
             }
         }
-        // Return world spawn as default
-        World defaultWorld = Bukkit.getWorlds().get(0);
-        return defaultWorld.getSpawnLocation();
+        World lobbyWorld = Bukkit.getWorld(getSpectatorLobbyWorld());
+        if (lobbyWorld != null) {
+            return lobbyWorld.getSpawnLocation();
+        }
+        return Bukkit.getWorlds().get(0).getSpawnLocation();
     }
     
     public void setLobbyLocation(Location location) {
@@ -66,15 +68,19 @@ public class ConfigManager {
         return config.getBoolean("world-sets.auto-detect", true);
     }
     
-    public boolean isInvisibleToOthers() {
-        return config.getBoolean("spectator.invisible-to-others", true);
-    }
-    
     public String getNetherSuffix() {
         return config.getString("world-sets.suffix-nethers", "_nether");
     }
     
     public String getEndSuffix() {
         return config.getString("world-sets.suffix-ends", "_the_end");
+    }
+    
+    public String getSpectatorLobbyWorld() {
+        return config.getString("spectator-lobby.world", "spectator_lobby");
+    }
+    
+    public boolean isSpectatorLobbyWorld(String worldName) {
+        return worldName.equalsIgnoreCase(getSpectatorLobbyWorld());
     }
 }

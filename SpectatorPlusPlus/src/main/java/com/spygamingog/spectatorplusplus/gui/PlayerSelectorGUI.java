@@ -28,24 +28,25 @@ public class PlayerSelectorGUI {
     }
     
     public void open(Player spectator) {
-        Set<String> playersInSet = worldSetManager.getPlayersInSameSet(spectator);
         List<Player> targetPlayers = new ArrayList<>();
         
-        // Filter out spectators and get Player objects
-        for (String playerName : playersInSet) {
-            Player player = Bukkit.getPlayerExact(playerName);
-            if (player != null && !spectatorManager.isSpectator(player)) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (!player.equals(spectator) && !spectatorManager.isSpectator(player)) {
                 targetPlayers.add(player);
             }
         }
         
-        // Calculate inventory size
+        if (targetPlayers.isEmpty()) {
+            spectator.sendMessage(ChatColor.RED + "No players available to spectate!");
+            return;
+        }
+        
         int size = Math.max(9, ((targetPlayers.size() + 8) / 9) * 9);
         size = Math.min(size, 54);
         
         Inventory gui = Bukkit.createInventory(null, size, 
             ChatColor.translateAlternateColorCodes('&', "&6Spectate Players"));
-        
+            
         int slot = 0;
         for (Player target : targetPlayers) {
             if (slot >= size) break;
@@ -60,6 +61,7 @@ public class PlayerSelectorGUI {
             lore.add(ChatColor.GRAY + "Gamemode: " + target.getGameMode().toString());
             lore.add("");
             lore.add(ChatColor.YELLOW + "Click to spectate!");
+            lore.add(ChatColor.GRAY + "First-person view");
             
             meta.setLore(lore);
             meta.setOwningPlayer(target);
@@ -73,11 +75,23 @@ public class PlayerSelectorGUI {
     }
     
     private String formatHealth(double health) {
-        int hearts = (int) Math.ceil(health / 2.0);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < hearts; i++) {
-            sb.append("❤");
+        double hearts = health / 2.0;
+        int fullHearts = (int) Math.floor(hearts);
+        
+        StringBuilder heartString = new StringBuilder();
+        for (int i = 0; i < fullHearts; i++) {
+            heartString.append("❤");
         }
-        return sb.toString();
+        
+        if (hearts - fullHearts >= 0.5) {
+            heartString.append("♥");
+        }
+        
+        int emptyHearts = 10 - heartString.length();
+        for (int i = 0; i < emptyHearts; i++) {
+            heartString.append("♡");
+        }
+        
+        return heartString.toString() + " " + String.format("%.1f", health) + "/20";
     }
 }

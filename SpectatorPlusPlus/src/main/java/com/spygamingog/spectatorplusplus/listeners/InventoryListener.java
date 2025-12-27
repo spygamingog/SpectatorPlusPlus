@@ -27,16 +27,13 @@ public class InventoryListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         
         if (spectatorManager.isSpectator(player)) {
-            // If spectating someone and viewing their inventory, block ALL clicks
             if (spectatorManager.isSpectating(player)) {
                 event.setCancelled(true);
                 return;
             }
             
-            // Allow clicking in player selector GUI
             String title = event.getView().getTitle();
             if (title.contains("Spectate Players")) {
-                // Handle player selection from GUI
                 if (event.getCurrentItem() != null && 
                     event.getCurrentItem().getType().toString().contains("PLAYER_HEAD")) {
                     String playerName = event.getCurrentItem().getItemMeta().getDisplayName()
@@ -53,7 +50,6 @@ public class InventoryListener implements Listener {
                 return;
             }
             
-            // Prevent moving compass and bed items
             if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta()) {
                 org.bukkit.inventory.meta.ItemMeta meta = event.getCurrentItem().getItemMeta();
                 String displayName = meta.getDisplayName();
@@ -64,7 +60,6 @@ public class InventoryListener implements Listener {
                 }
             }
             
-            // Cancel all other inventory interactions for spectators
             event.setCancelled(true);
         }
     }
@@ -76,7 +71,6 @@ public class InventoryListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         
         if (spectatorManager.isSpectator(player)) {
-            // Only allow dragging in player selector GUI
             String title = event.getView().getTitle();
             if (!title.contains("Spectate Players")) {
                 event.setCancelled(true);
@@ -91,9 +85,7 @@ public class InventoryListener implements Listener {
         Player player = (Player) event.getPlayer();
         
         if (spectatorManager.isSpectator(player)) {
-            // Prevent spectators from opening inventories unless they're spectating
             if (!spectatorManager.isSpectating(player)) {
-                // Allow only Ender Chest and Crafting table (for view only)
                 if (event.getInventory().getType() != InventoryType.ENDER_CHEST && 
                     event.getInventory().getType() != InventoryType.WORKBENCH) {
                     event.setCancelled(true);
@@ -104,6 +96,5 @@ public class InventoryListener implements Listener {
     
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {
-        // No infinite loop creation - removed problematic code
     }
 }

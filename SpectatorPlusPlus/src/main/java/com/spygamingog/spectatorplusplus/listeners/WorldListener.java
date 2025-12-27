@@ -66,14 +66,11 @@ public class WorldListener implements Listener {
     
         String displayName = item.getItemMeta().getDisplayName();
     
-        // Allow compass and bed interactions
         if ((item.getType() == Material.COMPASS && displayName.contains("Spectator Compass")) ||
             (item.getType() == Material.RED_BED && displayName.contains("Leave Spectator Mode"))) {
-            // These are handled by PlayerListener
             return;
         }
     
-    // Block all other interactions
         event.setCancelled(true);
     }
     
@@ -99,7 +96,6 @@ public class WorldListener implements Listener {
     }
     
     private boolean isBlockOpen(Block block) {
-        // Check if door/trapdoor/gate is open
         org.bukkit.block.data.Openable openable = (org.bukkit.block.data.Openable) block.getBlockData();
         return openable.isOpen();
     }
@@ -157,7 +153,7 @@ public class WorldListener implements Listener {
             
             if (spectatorManager.isSpectator(player)) {
                 event.setCancelled(true);
-                player.setFoodLevel(20); // Keep food level full
+                player.setFoodLevel(20);
             }
         }
     }
@@ -176,11 +172,10 @@ public class WorldListener implements Listener {
         Player player = event.getPlayer();
         
         if (spectatorManager.isSpectator(player)) {
-            // Allow spectators to toggle flight freely
             event.setCancelled(false);
             
             if (event.isFlying()) {
-                player.setFlySpeed(0.1f); // Normal creative flight speed
+                player.setFlySpeed(0.1f);
                 player.sendMessage(ChatColor.GRAY + "Flight enabled");
             } else {
                 player.setWalkSpeed(0.2f);
@@ -194,8 +189,6 @@ public class WorldListener implements Listener {
         Player player = event.getPlayer();
         
         if (spectatorManager.isSpectator(player)) {
-            // Spectators can walk normally, no block collision check needed
-            // Just ensure they can pass through entities (handled by setCollidable(false))
         }
     }
     
@@ -204,10 +197,8 @@ public class WorldListener implements Listener {
         Player player = event.getPlayer();
         
         if (spectatorManager.isSpectator(player)) {
-            // Allow spectators to use portals
             event.setCancelled(false);
             
-            // Update visibility after world change
             plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
                 spectatorManager.getVisibilityManager().handleWorldChange(player);
             }, 5L);
@@ -219,10 +210,8 @@ public class WorldListener implements Listener {
         Player player = event.getPlayer();
         
         if (spectatorManager.isSpectator(player) && !spectatorManager.isSpectating(player)) {
-            // Prevent teleport commands while in spectator mode
             if (event.getCause() == PlayerTeleportEvent.TeleportCause.COMMAND ||
                 event.getCause() == PlayerTeleportEvent.TeleportCause.PLUGIN) {
-                // Only allow if teleporting to spectate someone
                 boolean isSpectatingTeleport = false;
                 for (Player p : plugin.getServer().getOnlinePlayers()) {
                     if (event.getTo().distanceSquared(p.getLocation()) < 4) {
@@ -243,7 +232,6 @@ public class WorldListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         
-        // Update visibility for the new player
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             spectatorManager.getVisibilityManager().handlePlayerJoin(player);
         }, 10L);
@@ -254,11 +242,9 @@ public class WorldListener implements Listener {
         Player player = event.getPlayer();
         
         if (spectatorManager.isSpectator(player)) {
-            // Clean up when spectator leaves
             spectatorManager.leaveSpectator(player);
         }
         
-        // Use VisibilityManager
         spectatorManager.getVisibilityManager().handlePlayerQuit(player);
     }
     
@@ -266,13 +252,10 @@ public class WorldListener implements Listener {
     public void onPlayerChangedWorld(PlayerChangedWorldEvent event) {
         Player player = event.getPlayer();
         
-        // Use VisibilityManager
         plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             spectatorManager.getVisibilityManager().handleWorldChange(player);
             
-            // If spectator, update compass available players
             if (spectatorManager.isSpectator(player) && !spectatorManager.isSpectating(player)) {
-                // Refresh compass GUI if open
                 if (player.getOpenInventory() != null && 
                     player.getOpenInventory().getTitle().contains("Spectate Players")) {
                     player.closeInventory();

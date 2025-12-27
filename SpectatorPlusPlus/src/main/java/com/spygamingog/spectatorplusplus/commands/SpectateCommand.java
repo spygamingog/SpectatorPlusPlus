@@ -28,7 +28,6 @@ public class SpectateCommand implements CommandExecutor {
         Player player = (Player) sender;
         
         if (args.length == 0) {
-            // Toggle own spectator mode
             if (!player.hasPermission("spectatorplusplus.use")) {
                 player.sendMessage(ChatColor.RED + "You don't have permission!");
                 return true;
@@ -47,7 +46,6 @@ public class SpectateCommand implements CommandExecutor {
         }
         
         if (args.length == 1) {
-            // Spectate another player (admin command)
             if (!player.hasPermission("spectatorplusplus.spectate.others")) {
                 player.sendMessage(ChatColor.RED + "You don't have permission!");
                 return true;
@@ -60,14 +58,11 @@ public class SpectateCommand implements CommandExecutor {
                 return true;
             }
             
-            // If sender is admin and not in spectator, enter it first
             if (!spectatorManager.isSpectator(player)) {
                 spectatorManager.enterSpectator(player);
             }
             
-            // Spectate the target
             spectatorManager.spectatePlayer(player, target);
-            player.sendMessage(ChatColor.GREEN + "Now spectating " + target.getName());
             return true;
         }
         

@@ -22,24 +22,27 @@ public class ChatListener implements Listener {
         Player sender = event.getPlayer();
         
         if (spectatorManager.isSpectator(sender)) {
-            // Spectator chatting
-            String format = ChatColor.GRAY + "[Spectator] " + ChatColor.RESET + 
+            String format = org.bukkit.ChatColor.GRAY + "[Spectator] " + org.bukkit.ChatColor.RESET + 
                 sender.getName() + ": " + event.getMessage();
             
-            // Only send to other spectators and admins
             event.getRecipients().clear();
             for (Player recipient : plugin.getServer().getOnlinePlayers()) {
-                if (spectatorManager.isSpectator(recipient) || 
-                    recipient.hasPermission("spectatorplusplus.admin")) {
+                if (spectatorManager.isSpectator(recipient)) {
+                    if (spectatorManager.canSeeSpectatorChat(recipient)) {
+                        event.getRecipients().add(recipient);
+                    }
+                } else if (recipient.hasPermission("spectatorplusplus.admin")) {
                     event.getRecipients().add(recipient);
                 }
             }
             
             event.setFormat(format);
         } else {
-            // Non-spectator chatting
-            // Spectators should still see normal chat
-            // No changes needed, spectators remain as recipients
+            for (Player recipient : plugin.getServer().getOnlinePlayers()) {
+                if (spectatorManager.isSpectator(recipient) && !spectatorManager.canSeeSpectatorChat(recipient)) {
+                    event.getRecipients().remove(recipient);
+                }
+            }
         }
     }
 }
