@@ -22,7 +22,8 @@
   <a href="#-features">Features</a> •
   <a href="#-quick-start">Quick Start</a> •
   <a href="#-documentation">Documentation</a> •
-  <a href="#-support">Support</a>
+  <a href="#-support">Support</a> •
+  <a href="https://discord.gg/fzcGYV7E9Q">Discord</a>
 </p>
 
 ---
